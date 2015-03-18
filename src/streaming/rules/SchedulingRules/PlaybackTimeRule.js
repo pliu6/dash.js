@@ -107,6 +107,7 @@ MediaPlayer.rules.PlaybackTimeRule = function () {
             }
 
             while (request && streamProcessor.getFragmentModel().isFragmentLoadedOrPending(request)) {
+                time += request.duration;
                 if (request.action === "complete") {
                     request = null;
                     this.adapter.setIndexHandlerTime(streamProcessor, NaN);
@@ -114,6 +115,10 @@ MediaPlayer.rules.PlaybackTimeRule = function () {
                 }
 
                 request = this.adapter.getNextFragmentRequest(streamProcessor, track);
+            }
+
+            if (!!request) {
+                this.adapter.setIndexHandlerTime(streamProcessor, time);
             }
 
             if (request && !useRejected) {

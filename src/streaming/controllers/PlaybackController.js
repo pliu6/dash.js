@@ -34,6 +34,7 @@ MediaPlayer.dependencies.PlaybackController = function () {
     var WALLCLOCK_TIME_UPDATE_INTERVAL = 1000,
         currentTime = 0,
         liveStartTime = NaN,
+        liveStartTimeChanged = false,
         wallclockTimeIntervalId = null,
         commonEarliestTime = null,
         streamInfo,
@@ -127,7 +128,14 @@ MediaPlayer.dependencies.PlaybackController = function () {
             var track = this.adapter.convertDataToTrack(e.data.currentRepresentation);
             streamInfo = track.mediaInfo.streamInfo;
             isDynamic = e.sender.streamProcessor.isDynamic();
-            updateCurrentTime.call(this);
+
+            if (!isDynamic) {
+                updateCurrentTime.call(this);
+            }
+            else if (liveStartTimeChanged) {
+                updateCurrentTime.call(this);
+                liveStartTimeChanged = false;
+            }
         },
 
         onLiveEdgeSearchCompleted = function(e) {
@@ -347,6 +355,7 @@ MediaPlayer.dependencies.PlaybackController = function () {
 
         setLiveStartTime: function(value) {
             liveStartTime = value;
+            liveStartTimeChanged = true;
         },
 
         getLiveStartTime: function() {

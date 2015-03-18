@@ -374,6 +374,7 @@ MediaPlayer.dependencies.ScheduleController = function () {
                 actualStartTime;
             // get a request for a start time
             request = self.adapter.getFragmentRequestForTime(self.streamProcessor, currentTrackInfo, startTime);
+            self.adapter.setIndexHandlerTime(self.streamProcessor, startTime);
             actualStartTime = request.startTime;
 
             if (isNaN(currentLiveStart) || (actualStartTime > currentLiveStart)) {
