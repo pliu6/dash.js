@@ -74,6 +74,13 @@ videojs.Dashjs.prototype.duration = function() {
   return videojs.Html5.prototype.duration.call(this);
 };
 
+videojs.Dashjs.prototype.dispose = function() {
+  if(this.player().mediaPlayer) {
+    this.player().mediaPlayer.reset();
+  }
+  videojs.Html5.prototype.dispose.call(this);
+};
+
 videojs.Dashjs.isSupported = function(){
   return !!window.MediaSource;
 };
